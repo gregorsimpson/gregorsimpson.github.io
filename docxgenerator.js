@@ -46,7 +46,7 @@ function onRecord(row, mappings) {
     }
     data.input = row[column];
     data.outputDocName = (data.input.name ? data.input.name : "output") + ".docx";
-    setAttachmentUrl(data.attachmentId);
+    setAttachmentUrl(data.input.attachmentId);
   } catch (err) {
     handleError(err);
   }
