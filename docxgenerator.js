@@ -52,8 +52,10 @@ function onRecord(row, mappings) {
   }
 }
 
-async function setAttachmentUrl(attachmentId) {
-  const tokenInfo = await grist.docApi.getAccessToken({ readOnly: true });
+//async function setAttachmentUrl(attachmentId) {
+function setAttachmentUrl(attachmentId) {
+  //const tokenInfo = await grist.docApi.getAccessToken({ readOnly: true });
+  const tokenInfo = grist.docApi.getAccessToken({ readOnly: true });
   return `${tokenInfo.baseUrl}/attachments/${data.input.attachmentId}/download?auth=${tokenInfo.token}`;
   //data.attachmentUrl = `${tokenInfo.baseUrl}/attachments/${data.input.attachmentId}/download?auth=${tokenInfo.token}`;
 }
