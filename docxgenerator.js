@@ -26,7 +26,8 @@ function handleError(err) {
   data.status = String(err).replace(/^Error: /, "");
 }
 
-function onRecord(row, mappings) {
+//function onRecord(row, mappings) {
+async function onRecord(row, mappings) {
   try {
     data.status = "";
     data.results = null;
