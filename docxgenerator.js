@@ -6,6 +6,7 @@ function ready(fn) {
   }
 }
 
+const expressionParser = require("docxtemplater/expressions.js");
 //const CORSANYWHERE = "https://fast-dawn-89938.herokuapp.com";
 const column = "Input";
 let app = undefined;
@@ -88,6 +89,7 @@ async function generate() {
     var doc = new window.docxtemplater(zip, {
       paragraphLoop: true,
       linebreaks: true,
+      parser: expressionParser
     });
     doc.render(data.input.tags);
     var out = doc.getZip().generate({
