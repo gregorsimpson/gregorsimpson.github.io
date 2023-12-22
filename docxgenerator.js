@@ -46,7 +46,7 @@ function onRecord(row, mappings) {
     }
     data.input = row[column];
     data.outputDocName = (data.input.name ? data.input.name : "output") + ".docx";
-    setAttachmentUrl(data.input.attachmentId);
+    data.attachmentUrl = await setAttachmentUrl(data.input.attachmentId);
   } catch (err) {
     handleError(err);
   }
@@ -54,7 +54,8 @@ function onRecord(row, mappings) {
 
 async function setAttachmentUrl(attachmentId) {
   const tokenInfo = await grist.docApi.getAccessToken({ readOnly: true });
-  data.attachmentUrl = `${tokenInfo.baseUrl}/attachments/${data.input.attachmentId}/download?auth=${tokenInfo.token}`;
+  return `${tokenInfo.baseUrl}/attachments/${data.input.attachmentId}/download?auth=${tokenInfo.token}`;
+  //data.attachmentUrl = `${tokenInfo.baseUrl}/attachments/${data.input.attachmentId}/download?auth=${tokenInfo.token}`;
 }
 
 ready(function () {
