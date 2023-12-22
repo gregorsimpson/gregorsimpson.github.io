@@ -46,16 +46,14 @@ function onRecord(row, mappings) {
     }
     data.input = row[column];
     data.outputDocName = (data.input.name ? data.input.name : "output") + ".docx";
-    data.attachmentUrl = setAttachmentUrl(data.input.attachmentId);
+    data.attachmentUrl = await setAttachmentUrl(data.input.attachmentId);
   } catch (err) {
     handleError(err);
   }
 }
 
-//async function setAttachmentUrl(attachmentId) {
-function setAttachmentUrl(attachmentId) {
-  //const tokenInfo = await grist.docApi.getAccessToken({ readOnly: true });
-  const tokenInfo = grist.docApi.getAccessToken({ readOnly: true });
+async function setAttachmentUrl(attachmentId) {
+  const tokenInfo = await grist.docApi.getAccessToken({ readOnly: true });
   return `${tokenInfo.baseUrl}/attachments/${data.input.attachmentId}/download?auth=${tokenInfo.token}`;
   //data.attachmentUrl = `${tokenInfo.baseUrl}/attachments/${data.input.attachmentId}/download?auth=${tokenInfo.token}`;
 }
