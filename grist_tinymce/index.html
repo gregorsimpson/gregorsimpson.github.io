@@ -8,7 +8,6 @@
     <title>vue-easy-tinymce</title>
 
     <link rel="stylesheet" href="css/style.css">
-
 </head>
 <body>
 
@@ -31,10 +30,20 @@
 
 </div>
 
+<script type="importmap">
+    {
+      "imports": {
+        "vue": "https://unpkg.com/vue@3/dist/vue.esm-browser.js"
+      }
+    }
+</script>
+
+<script type="module">
+    import { Vue } from 'vue'
+</script>
+
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/4.7.4/tinymce.min.js"></script> <!-- TinyMCE core -->
-
-<script src="https://unpkg.com/vue@3/dist/vue.esm-browser.js"></script> <!-- Vue.js core -->
 
 <script src="https://cdn.jsdelivr.net/npm/vue-easy-tinymce/dist/vue-easy-tinymce.min.js"></script> <!-- VueEasyTinyMCE module-->
 
