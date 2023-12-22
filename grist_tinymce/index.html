@@ -1,63 +1,23 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>vue-easy-tinymce</title>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <link rel="stylesheet" href="css/style.css">
-</head>
-<body>
+    <script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
 
+    <script>
+      tinymce.init({
+        selector: '#mytextarea'
+      });
+    </script>
 
-<div id="app">
-    <img src="logo.png">
+  </head>
 
-    <tinymce v-model="myModel"
-             :plugins="myPlugins" :toolbar1="myToolbar1" :toolbar2="myToolbar2"
-             :other="myOtherOptions">
-    </tinymce>
-
-    <br>
-    <button @click="getModelValue()">Get current model value</button>
-    <button @click="changeModelValue()">Change model value programmability</button>
-    <button @click="clearModelValue()">Clear model value</button>
-
-    <br><br>
-    <a target="_blank" href="https://github.com/m3esma/vue-easy-tinymce">vue-easy-tinymce</a>
-
-</div>
-
-<script type="importmap">
-    {
-      "imports": {
-        "vue": "https://unpkg.com/vue@3/dist/vue.esm-browser.js"
-      }
-    }
-</script>
-
-<script type="module">
-    import { createApp } from 'vue'
-
-    createApp({
-        data(){
-            return{
-                message: "WHATEVER."
-            }
-        }
-    }).mount("#app")
-</script>
-
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/4.7.4/tinymce.min.js"></script> <!-- TinyMCE core -->
-
-<script src="https://cdn.jsdelivr.net/npm/vue-easy-tinymce/dist/vue-easy-tinymce.min.js"></script> <!-- VueEasyTinyMCE module-->
-
-<script src="index.js"></script>
-
-<div id="app"">{{ message }}</div>
-
-</body>
+  <body>
+  <h1>TinyMCE Quick Start Guide</h1>
+    <form method="post">
+      <textarea id="mytextarea">Hello, World!</textarea>
+    </form>
+  </body>
 </html>
