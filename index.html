@@ -27,7 +27,7 @@
         </template>
       </div>
       <template v-else>
-        <button class="button" v-on:click="generate">{{ outputDocName }}</button>
+        <button class="button" v-on:click="generate">Dokument '{{ outputDocName }}' generieren</button>
         <div class="result" v-if="results">{{ results }}</div>
       </template>
     </div>
