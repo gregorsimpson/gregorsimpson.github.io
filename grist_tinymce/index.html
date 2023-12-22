@@ -39,7 +39,15 @@
 </script>
 
 <script type="module">
-    import { Vue } from 'vue'
+    import { createApp } from 'vue'
+
+    createApp({
+        data(){
+            return{
+                message: "WHATEVER."
+            }
+        }
+    }).mount("#app")
 </script>
 
 
@@ -49,6 +57,7 @@
 
 <script src="index.js"></script>
 
+<div id="app"">{{ message }}</div>
 
 </body>
 </html>
