@@ -87,7 +87,8 @@ async function generate() {
     var zip = new PizZip(content);
     var doc = new window.docxtemplater(zip, {
       paragraphLoop: true,
-      linebreaks: true
+      linebreaks: true,
+      parser: Parser
     });
     doc.render(data.input.tags);
     var out = doc.getZip().generate({
