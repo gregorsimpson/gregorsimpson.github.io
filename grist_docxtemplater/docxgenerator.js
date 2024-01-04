@@ -55,8 +55,10 @@ async function onRecord(row, mappings) {
 
 async function setAttachmentUrl(attachmentId) {
   const tokenInfo = await grist.docApi.getAccessToken({ readOnly: true });
-  //return `${tokenInfo.baseUrl}/attachments/${data.input.attachmentId}/download?auth=${tokenInfo.token}`;
-  return `${tokenInfo.baseUrl}/attachments/${data.input.attachmentId}/download`;
+  console.log(`"AccessToken: ${tokenInfo.baseUrl} --- ${tokenInfo.token}`);
+  console.log(`Attachment ID: ${data.input.attachmentId}`);
+  return `${tokenInfo.baseUrl}/attachments/${data.input.attachmentId}/download?auth=${tokenInfo.token}`;
+  //return `${tokenInfo.baseUrl}/attachments/${data.input.attachmentId}/download`;
   //data.attachmentUrl = `${tokenInfo.baseUrl}/attachments/${data.input.attachmentId}/download?auth=${tokenInfo.token}`;
 }
 
