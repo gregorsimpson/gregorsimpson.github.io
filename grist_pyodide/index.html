@@ -46,10 +46,11 @@
       grist.ready();
       grist.onRecord(async function(record) {
         //document.getElementById('readout').innerHTML = JSON.stringify(record, null, 2);
+        //${record['pycode'].replace(/\n/g, "\n\t")}
         code.value = `
   def usercode():
     try:
-      ${record['pycode'].replace(/\n/g, "\n\t")}
+      ${record['pycode']}
     except:
       raise
   `;
