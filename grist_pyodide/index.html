@@ -49,7 +49,7 @@
         code.value = `
   def usercode():
     try:
-      ${record['pycode']}
+      ${record['pycode'].replace(/\n/g, "\n\t")}
     except:
       raise
   `;
