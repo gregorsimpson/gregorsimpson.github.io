@@ -43,7 +43,8 @@ async function onRecord(row, mappings) {
         .map((k) => JSON.stringify(k))
         .join(", ");
       const gristName = mappings?.[column] || column;
-      throw new Error(`"${gristName}" cells should contain an object with keys ${allKeys}. ` + `Missing keys: ${missing}`);
+      //throw new Error(`"${gristName}" cells should contain an object with keys ${allKeys}. ` + `Missing keys: ${missing}`);
+      throw new Error('Bitte eine Dokumentvorlage ausw&auml;hlen!');
     }
     data.input = row[column];
     data.outputDocName = (data.input.name ? data.input.name : "output") + ".docx";
