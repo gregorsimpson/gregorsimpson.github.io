@@ -3,71 +3,37 @@
     <head>
         <meta charset="UTF-8">
         <script src="https://docs.getgrist.com/grist-plugin-api.js"></script>
-    </head>
-    <body>
-        <style>
-            #container {
-                width: 95%;
-                height: 90%;
-                border: solid 1px #000000;
-                margin: 20px auto;
-            }
-            .ck-editor__editable[role="textbox"] {
-                /* editing area */
-                min-height: 200px;
-            }
-            .ck-content .image {
-                /* block images */
-                max-width: 80%;
-                margin: 20px auto;
-            }
-        </style>
-        <input type="button" value="Speichern" id="button_save" />
-        <div id="container">
-            <div id="editor">
-            </div>
-        </div>
-        <script type="text/javascript">
-            var tableName = null;
-            var html = "";
-            var record_mapped = null;
-            var record_id = null;
-            var record_colName = null;
-            const colName_html = "HTML";
-
-            function handleError(err) {
-              console.error('ERROR', err);
-              document.body.innerHTML = String(err).replace(/^Error: /, '');
-            }
-
-            async function onRecord(record, mappedColNamesToRealColNames) {
-              try {
-                record_mapped = grist.mapColumnNames(record);
-                if (record_mapped) {
-                  record_id = record.id;
-                  record_colName = mappedColNamesToRealColNames[colName_html];
-                  //POPULATE EDITOR: editor.setData(record_mapped[colName_html]);
-                } else {
-                  throw new Error(`Please map all required columns first.`);
-                }
-              } catch (err) {
-                handleError(err);
-              }
-            }
-        </script>
         <!--
             The "super-build" of CKEditor&nbsp;5 served via CDN contains a large set of plugins and multiple editor types.
             See https://ckeditor.com/docs/ckeditor5/latest/installation/getting-started/quick-start.html#running-a-full-featured-editor-from-cdn
         -->
         <script src="https://cdn.ckeditor.com/ckeditor5/40.2.0/super-build/ckeditor.js"></script>
-        <!--
-            Uncomment to load the Spanish translation
-            <script src="https://cdn.ckeditor.com/ckeditor5/40.2.0/super-build/translations/es.js"></script>
-        -->
-        <script>           
+        <script>
+          const grist_mapping_colName = "HTML";
+
+          var editor = null;
+          var grist_tableName = null;
+          var grist_record = null;
+          var grist_recordMapped = null;
+          var grist_colName = null;
+
+          function ready(fn) {
+            if (document.readyState !== 'loading'){
+              fn();
+            } else {
+              document.addEventListener('DOMContentLoaded', fn);
+            }
+          }
+
+          function handleError(err) {
+            console.error('ERROR', err);
+            document.body.innerHTML = String(err).replace(/^Error: /, '');
+          }
+
+          async function createEditor() {
             // This sample still does not showcase all CKEditor&nbsp;5 features (!)
             // Visit https://ckeditor.com/docs/ckeditor5/latest/features/index.html to browse all the features.
-            CKEDITOR.ClassicEditor.create(document.getElementById("editor"), {
+            return await CKEDITOR.ClassicEditor.create(document.getElementById("editor"), {
                 // https://ckeditor.com/docs/ckeditor5/latest/features/toolbar/toolbar.html#extended-toolbar-configuration-format
                 toolbar: {
                     items: [
@@ -214,27 +180,65 @@
                     'TableOfContents',
                     'PasteFromOfficeEnhanced'
                 ]
-            }).then(async function(editor) {   
-                await grist.onRecord(onRecord);
-                grist.on('message', (e) => {
-                    if (e.tableId) {
-                      tableName = e.tableId;
-                    }
-                });
-                document.getElementById('button_save').addEventListener('click', async function() {
-                    await grist.docApi.applyUserActions([['UpdateRecord', tableName, record_id, {
-                      [record_colName]: editor.getData()
-                    }]]);
-                });
-                grist.ready({
-                    requiredAccess: "full",
-                    columns: [
-                        {name: colName_html, title: "HTML"}
-                    ]
-                });
-            }).catch(err => {
-                console.error(err);
             });
+          }
+          
+          ready(async () => {
+            editor = await createEditor;
+            await grist.onRecord((record, mappedColNamesToRealColNames) => {
+              try {
+                record_mapped = grist.mapColumnNames(record);
+                if (!record_mapped) {
+                  throw new Error(`Please map all required columns first.`);
+                }
+                grist_record = record;
+                grist_recordMapped = record_mapped;
+                grist_colName = mappedColNamesToRealColNames[grist_mapping_colName];
+              } catch (err) {
+                handleError(err);
+              }
+            });
+            grist.on('message', (e) => {
+                if (e.tableId) {
+                  tableName = e.tableId;
+                }
+            });
+            document.getElementById('button_save').addEventListener('click', async function() {
+                await grist.docApi.applyUserActions([['UpdateRecord', grist_tableName, grist_record.id, {
+                  [grist_colName]: editor.getData()
+                }]]);
+            });
+            grist.ready({
+                requiredAccess: "full",
+                columns: [
+                    {name: grist_mapping_colName, title: "HTML"}
+                ]
+            });
+          });
         </script>
+    </head>
+    <body>
+        <style>
+            #container {
+                width: 95%;
+                height: 90%;
+                border: solid 1px #000000;
+                margin: 20px auto;
+            }
+            .ck-editor__editable[role="textbox"] {
+                /* editing area */
+                min-height: 200px;
+            }
+            .ck-content .image {
+                /* block images */
+                max-width: 80%;
+                margin: 20px auto;
+            }
+        </style>
+        <input type="button" value="Speichern" id="button_save" />
+        <div id="container">
+            <div id="editor">
+            </div>
+        </div>
     </body>
 </html>
