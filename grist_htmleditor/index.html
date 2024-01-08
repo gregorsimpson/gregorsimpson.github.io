@@ -187,7 +187,9 @@
                 ]
             });
             document.getElementById('button_save').addEventListener('click', function() {
-                alert(editor.getData());
+                await grist.docApi.applyUserActions([['UpdateRecord', 'Helper', 1, {
+                  tester: editor.getData()
+                }]]);
             });
         </script>
     </body>
