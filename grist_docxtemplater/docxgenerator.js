@@ -44,7 +44,7 @@ async function onRecord(row, mappings) {
         .join(", ");
       const gristName = mappings?.[column] || column;
       //throw new Error(`"${gristName}" cells should contain an object with keys ${allKeys}. ` + `Missing keys: ${missing}`);
-      throw new Error('Bitte eine Dokumentvorlage ausw&auml;hlen!');
+      throw new Error('Bitte eine Dokumentvorlage auswählen.');
     }
     data.input = row[column];
     data.outputDocName = (data.input.name ? data.input.name : "output") + ".docx";
