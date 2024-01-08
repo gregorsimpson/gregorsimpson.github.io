@@ -38,7 +38,7 @@
         <script>
             // This sample still does not showcase all CKEditor&nbsp;5 features (!)
             // Visit https://ckeditor.com/docs/ckeditor5/latest/features/index.html to browse all the features.
-            var editor = await CKEDITOR.ClassicEditor.create(document.getElementById("editor"), {
+            var editor = CKEDITOR.ClassicEditor.create(document.getElementById("editor"), {
                 // https://ckeditor.com/docs/ckeditor5/latest/features/toolbar/toolbar.html#extended-toolbar-configuration-format
                 toolbar: {
                     items: [
@@ -185,11 +185,12 @@
                     'TableOfContents',
                     'PasteFromOfficeEnhanced'
                 ]
-            });
-            document.getElementById('button_save').addEventListener('click', function() {
-                await grist.docApi.applyUserActions([['UpdateRecord', 'Helper', 1, {
-                  tester: editor.getData()
-                }]]);
+            }).then(async function() {
+                document.getElementById('button_save').addEventListener('click', async function() {
+                    await grist.docApi.applyUserActions([['UpdateRecord', 'Helper', 1, {
+                      tester: editor.getData()
+                    }]]);
+                })
             });
         </script>
     </body>
