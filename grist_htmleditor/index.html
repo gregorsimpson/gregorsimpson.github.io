@@ -27,6 +27,34 @@
             <div id="editor">
             </div>
         </div>
+        <script type="text/javascript">
+            var tableName = null;
+            var html = "";
+            var record_mapped = null;
+            var record_id = null;
+            var record_colName = null;
+            const colName_html = "HTML";
+
+            function handleError(err) {
+              console.error('ERROR', err);
+              document.body.innerHTML = String(err).replace(/^Error: /, '');
+            }
+
+            async function onRecord(record, mappedColNamesToRealColNames) {
+              try {
+                record_mapped = grist.mapColumnNames(record);
+                if (record_mapped) {
+                  record_id = record.id;
+                  record_colName = mappedColNamesToRealColNames[colName_html];
+                  //POPULATE EDITOR: editor.setData(record_mapped[colName_html]);
+                } else {
+                  throw new Error(`Please map all required columns first.`);
+                }
+              } catch (err) {
+                handleError(err);
+              }
+            }
+        </script>
         <!--
             The "super-build" of CKEditor&nbsp;5 served via CDN contains a large set of plugins and multiple editor types.
             See https://ckeditor.com/docs/ckeditor5/latest/installation/getting-started/quick-start.html#running-a-full-featured-editor-from-cdn
@@ -36,7 +64,7 @@
             Uncomment to load the Spanish translation
             <script src="https://cdn.ckeditor.com/ckeditor5/40.2.0/super-build/translations/es.js"></script>
         -->
-        <script>
+        <script>           
             // This sample still does not showcase all CKEditor&nbsp;5 features (!)
             // Visit https://ckeditor.com/docs/ckeditor5/latest/features/index.html to browse all the features.
             CKEDITOR.ClassicEditor.create(document.getElementById("editor"), {
@@ -186,12 +214,24 @@
                     'TableOfContents',
                     'PasteFromOfficeEnhanced'
                 ]
-            }).then(function(editor) {
+            }).then(async function(editor) {   
+                await grist.onRecord(onRecord);
+                grist.on('message', (e) => {
+                    if (e.tableId) {
+                      tableName = e.tableId;
+                    }
+                });
                 document.getElementById('button_save').addEventListener('click', async function() {
-                    await grist.docApi.applyUserActions([['UpdateRecord', 'Helper', 1, {
-                      tester: editor.getData()
+                    await grist.docApi.applyUserActions([['UpdateRecord', tableName, record_id, {
+                      [record_colName]: editor.getData()
                     }]]);
-                })
+                });
+                grist.ready({
+                    requiredAccess: "full",
+                    columns: [
+                        {name: colName_html, title: "HTML"}
+                    ]
+                });
             }).catch(err => {
                 console.error(err);
             });
